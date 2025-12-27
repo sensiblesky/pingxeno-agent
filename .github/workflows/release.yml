@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+      
+      - name: Build Linux AMD64
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o pingxeno-agent-linux-amd64 ./cmd/agent
+      
+      - name: Build Linux ARM64
+        run: |
+          GOOS=linux GOARCH=arm64 go build -o pingxeno-agent-linux-arm64 ./cmd/agent
+      
+      - name: Build Windows AMD64
+        run: |
+          GOOS=windows GOARCH=amd64 go build -o pingxeno-agent-windows-amd64.exe ./cmd/agent
+      
+      - name: Build macOS AMD64
+        run: |
+          GOOS=darwin GOARCH=amd64 go build -o pingxeno-agent-darwin-amd64 ./cmd/agent
+      
+      - name: Build macOS ARM64
+        run: |
+          GOOS=darwin GOARCH=arm64 go build -o pingxeno-agent-darwin-arm64 ./cmd/agent
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            pingxeno-agent-linux-amd64
+            pingxeno-agent-linux-arm64
+            pingxeno-agent-windows-amd64.exe
+            pingxeno-agent-darwin-amd64
+            pingxeno-agent-darwin-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

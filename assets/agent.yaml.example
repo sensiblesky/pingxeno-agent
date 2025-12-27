@@ -1,0 +1,23 @@
+server:
+  api_url: "https://your-domain.com/api/v1/server-stats"
+  api_key: "pk_your_api_key_here"
+  server_key: "srv_your_server_key_here"
+
+collection:
+  interval: 60s  # Collection interval (e.g., 30s, 1m, 5m)
+  jitter: 5s     # Random jitter to avoid thundering herd
+
+sender:
+  batch_size: 10
+  batch_timeout: 30s
+  retry_attempts: 3
+  retry_backoff: 2s
+
+security:
+  tls_skip_verify: false
+  timeout: 30s
+
+logging:
+  level: "info"  # debug, info, warn, error
+  file: ""       # Leave empty for stdout, or specify path like "/var/log/pingxeno-agent.log"
+
