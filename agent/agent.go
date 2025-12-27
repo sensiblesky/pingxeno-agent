@@ -68,12 +68,16 @@ func NewAgent(cfg *config.Config, logger *zap.Logger) (*Agent, error) {
 // CollectMetrics collects all system metrics
 func (a *Agent) CollectMetrics() (*protocol.MetricsPayload, error) {
 	payload := &protocol.MetricsPayload{
-		ServerKey:  a.config.Server.ServerKey,
-		Hostname:   a.identity.Hostname,
-		OSType:     a.identity.OSType,
-		OSVersion:  a.identity.OSVersion,
-		IPAddress:  a.identity.IPAddress,
-		RecordedAt: time.Now(),
+		ServerKey:   a.config.Server.ServerKey,
+		Hostname:    a.identity.Hostname,
+		OSType:      a.identity.OSType,
+		OSVersion:   a.identity.OSVersion,
+		IPAddress:   a.identity.IPAddress,
+		MachineID:   a.identity.MachineID,
+		SystemUUID:  a.identity.SystemUUID,
+		DiskUUID:    a.identity.DiskUUID,
+		AgentID:     a.identity.AgentID,
+		RecordedAt:  time.Now(),
 	}
 
 	// Collect CPU metrics

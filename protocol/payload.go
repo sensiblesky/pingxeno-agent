@@ -38,6 +38,10 @@ type MetricsPayload struct {
 	OSVersion            string                 `json:"os_version,omitempty"`
 	IPAddress            string                 `json:"ip_address,omitempty"`
 	AgentVersion         string                 `json:"agent_version,omitempty"`
+	MachineID            string                 `json:"machine_id,omitempty"`
+	SystemUUID           string                 `json:"system_uuid,omitempty"`
+	DiskUUID             string                 `json:"disk_uuid,omitempty"`
+	AgentID              string                 `json:"agent_id,omitempty"`
 	RecordedAt           time.Time              `json:"recorded_at"`
 }
 
