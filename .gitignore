@@ -2,6 +2,9 @@
 pingxeno-agent
 pingxeno-agent.exe
 pingxeno-agent-*
+pingxeno-agent-linux-*
+pingxeno-agent-windows-*
+pingxeno-agent-darwin-*
 *.exe
 *.dll
 *.so
