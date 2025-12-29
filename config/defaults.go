@@ -1,9 +1,27 @@
 package config
 
-import "time"
+import (
+	"os"
+	"path/filepath"
+	"runtime"
+	"time"
+)
 
 // DefaultConfig returns a configuration with default values
 func DefaultConfig() *Config {
+	var defaultLogFile string
+	if runtime.GOOS == "windows" {
+		// Windows: Use ProgramData directory
+		programData := os.Getenv("ProgramData")
+		if programData == "" {
+			programData = "C:\\ProgramData"
+		}
+		defaultLogFile = filepath.Join(programData, "PingXeno", "agent.log")
+	} else {
+		// Unix-like: Use /var/log
+		defaultLogFile = "/var/log/pingxeno-agent.log"
+	}
+
 	return &Config{
 		Server: ServerConfig{
 			APIURL:    "http://localhost:8000/api/v1/server-stats",
@@ -26,7 +44,7 @@ func DefaultConfig() *Config {
 		},
 		Logging: LoggingConfig{
 			Level: "info",
-			File:  "",
+			File:  defaultLogFile,
 		},
 	}
 }

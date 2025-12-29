@@ -30,11 +30,11 @@ func NewLogger(level string, logFile string) (*zap.Logger, error) {
 
 	var writeSyncer zapcore.WriteSyncer
 	if logFile != "" {
-		file, err := os.OpenFile(logFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		rotatingWriter, err := NewRotatingWriter(logFile)
 		if err != nil {
 			return nil, err
 		}
-		writeSyncer = zapcore.NewMultiWriteSyncer(zapcore.AddSync(file), zapcore.AddSync(os.Stdout))
+		writeSyncer = zapcore.NewMultiWriteSyncer(zapcore.AddSync(rotatingWriter), zapcore.AddSync(os.Stdout))
 	} else {
 		writeSyncer = zapcore.AddSync(os.Stdout)
 	}

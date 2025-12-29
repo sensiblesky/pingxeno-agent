@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
+	"runtime"
 	"strings"
 	"syscall"
 	"time"
@@ -26,6 +28,15 @@ var (
 func main() {
 	log, _ = logger.NewLogger("info", "")
 
+	// Check if running with --gui flag or on Windows without console
+	if len(os.Args) > 1 && os.Args[1] == "gui" {
+		if err := runGUI(); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		return
+	}
+
 	rootCmd := &cobra.Command{
 		Use:   "pingxeno-agent",
 		Short: "PingXeno Monitoring Agent",
@@ -40,6 +51,7 @@ func main() {
 		createConfigCommand(),
 		createTestCommand(),
 		createVersionCommand(),
+		createGUICommand(),
 	)
 
 	if err := rootCmd.Execute(); err != nil {
@@ -68,6 +80,9 @@ func createRunCommand() *cobra.Command {
 			logFile, _ := cmd.Flags().GetString("log-file")
 			if logFile != "" {
 				cfg.Logging.File = logFile
+			} else if cfg.Logging.File == "" {
+				// Use default log file if not specified
+				cfg.Logging.File = getDefaultLogFile()
 			}
 
 			log, err = logger.NewLogger(cfg.Logging.Level, cfg.Logging.File)
@@ -410,6 +425,17 @@ func createVersionCommand() *cobra.Command {
 	}
 }
 
+func createGUICommand() *cobra.Command {
+	return &cobra.Command{
+		Use:   "gui",
+		Short: "Run agent with GUI (Windows only)",
+		Long:  "Start the agent in background mode with GUI interface (Windows only)",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runGUI()
+		},
+	}
+}
+
 func findConfigFile() string {
 	paths := []string{
 		"./agent.yaml",
@@ -432,5 +458,16 @@ func getDefaultConfigPath() string {
 		return "/etc/pingxeno/agent.yaml"
 	}
 	return os.Getenv("HOME") + "/.config/pingxeno/agent.yaml"
+}
+
+func getDefaultLogFile() string {
+	if runtime.GOOS == "windows" {
+		programData := os.Getenv("ProgramData")
+		if programData == "" {
+			programData = "C:\\ProgramData"
+		}
+		return filepath.Join(programData, "PingXeno", "agent.log")
+	}
+	return "/var/log/pingxeno-agent.log"
 }
 
