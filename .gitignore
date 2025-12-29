@@ -54,3 +54,5 @@ temp/
 *.tmp
 
 test-build
+test-build
+builds/
