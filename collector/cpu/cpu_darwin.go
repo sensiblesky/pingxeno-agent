@@ -3,6 +3,8 @@
 package cpu
 
 import (
+	"time"
+
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/load"
 )
@@ -14,7 +16,9 @@ func newCollector() Collector {
 }
 
 func (c *DarwinCollector) GetUsagePercent() (float64, error) {
-	percentages, err := cpu.Percent(0, false)
+	// On macOS, cpu.Percent needs a non-zero interval to calculate usage
+	// Use 1 second interval for accurate measurement
+	percentages, err := cpu.Percent(time.Second, false)
 	if err != nil {
 		return 0, err
 	}
