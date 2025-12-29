@@ -1,14 +1,14 @@
 # Binaries
-pingxeno-agent
-pingxeno-agent.exe
-pingxeno-agent-*
-pingxeno-agent-linux-*
-pingxeno-agent-windows-*
-pingxeno-agent-darwin-*
-*.exe
-*.dll
-*.so
-*.dylib
+# pingxeno-agent
+# pingxeno-agent.exe
+# pingxeno-agent-*
+# pingxeno-agent-linux-*
+# pingxeno-agent-windows-*
+# pingxeno-agent-darwin-*
+# *.exe
+# *.dll
+# *.so
+# *.dylib
 
 # Test binary, built with `go test -c`
 *.test
@@ -45,7 +45,7 @@ config.yaml
 
 # Build artifacts
 dist/
-build/
+# build/
 bin/
 
 # Temporary files
@@ -55,4 +55,4 @@ temp/
 
 test-build
 test-build
-builds/
+# builds/
